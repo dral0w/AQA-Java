@@ -24,10 +24,10 @@ public class Lesson1 {
 
         if (value <= 0) {
             System.out.println("Красный");
-        } else if (value > 0 && value <= 100) {
-            System.out.println("Желтый");
-        } else {
+        } else if (value > 100) {
             System.out.println("Зеленый");
+        } else {
+            System.out.println("Желтый");
         }
     }
 
