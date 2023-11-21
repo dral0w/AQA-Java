@@ -34,7 +34,7 @@ public class Lesson3 {
         for (int i = 0; i < array.length; i++) {
             if (array[i] == 0) {
                 array[i] = 1;
-            } else {
+            } else if (array[i] == 1){
                 array[i] = 0;
             }
         }
@@ -79,7 +79,7 @@ public class Lesson3 {
     public int[] task11(int len, int initialValue) {
         int[] array = new int[len];
 
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < len; i++) {
             array[i] = initialValue;
         }
         return array;
