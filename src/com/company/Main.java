@@ -18,13 +18,8 @@ public class Main {
     При подаче массива другого размера необходимо бросить исключение MyArraySizeException.
      */
     public static int myArray(String[][] array) throws MyArrayDataException, MyArraySizeException {
-        if (array.length != 4) {
+        if (array.length != 4 || array[0].length != 4) {
             throw new MyArraySizeException();
-        }
-        for (int i = 0; i < 4; i++) {
-            if (array[i].length != 4) {
-                throw new MyArraySizeException();
-            }
         }
         /*
         Далее метод должен пройтись по всем элементам массива, преобразовать в int и просуммировать.
