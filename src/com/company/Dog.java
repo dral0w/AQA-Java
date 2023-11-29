@@ -34,6 +34,7 @@ public class Dog extends Animal {
     }
 
     public static int getDogsCount() {
+        System.out.println("Всего собак: " + dogsCount);
         return dogsCount;
     }
 }

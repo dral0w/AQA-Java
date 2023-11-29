@@ -5,4 +5,13 @@ public interface Figure {
     double getPerimeter();
 
     double getSquare();
+
+    String getColor();
+
+    String getBorderColor();
+
+    default void getInformation() {
+        System.out.println("Цвет фигуры: " + getColor() + "\nЦвет границы: " + getBorderColor() +
+                "\nПериметр: " + getPerimeter() + "\nПлощадь: " + getSquare() + "\n");
+    }
 }

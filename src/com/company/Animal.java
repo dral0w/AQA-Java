@@ -18,6 +18,7 @@ public class Animal {
     }
 
     public static int getAnimalsCount() {
+        System.out.println("Всего животных: " + animalsCount);
         return animalsCount;
     }
 }

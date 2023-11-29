@@ -1,11 +1,11 @@
 package com.company;
 
-public class Triangle implements Figure {
+public class Triangle implements Figure{
     private final int side1;
     private final int side2;
     private final int side3;
-    private String color;
-    private String borderColor;
+    private String color = "black";
+    private String borderColor = "black";
 
     public Triangle(int side1, int side2, int side3) {
         this.side1 = side1;
@@ -24,16 +24,21 @@ public class Triangle implements Figure {
         return Math.sqrt(p * (p - side1) * (p - side2) * (p - side3));
     }
 
+    @Override
+    public String getColor() {
+        return color;
+    }
+
+    @Override
+    public String getBorderColor() {
+        return borderColor;
+    }
+
     public void setColor(String color) {
         this.color = color;
     }
 
     public void setBorderColor(String borderColor) {
         this.borderColor = borderColor;
-    }
-
-    public void getInformation() {
-        System.out.println("Цвет заливки: " + color + "\n" + "Цвет границ: " + borderColor + "\n" +
-                "Площадь: " + getSquare() + "\n" + "Периметр: " + getPerimeter());
     }
 }
