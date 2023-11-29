@@ -19,5 +19,6 @@ public class Plate {
             food -= count;
             System.out.println("Из тарелки взято " + count + " еды");
         }
+        System.out.println("В тарелке осталось " + food + " еды");
     }
 }
