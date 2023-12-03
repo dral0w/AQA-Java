@@ -30,11 +30,11 @@ public class AppData implements Serializable {
     //Сохранение данных в файл
     public void write() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("file.csv"))){
-            bufferedWriter.write(String.join(";", getHeader()));
+            bufferedWriter.write(String.join("; ", getHeader()));
             bufferedWriter.newLine();
 
             for (int[] datum : data) {
-                bufferedWriter.write(String.join(";", intArrayToStringArray(datum)));
+                bufferedWriter.write(String.join("; ", intArrayToStringArray(datum)));
                 bufferedWriter.newLine();
             }
         } catch (IOException e) {
@@ -46,12 +46,12 @@ public class AppData implements Serializable {
     public void read() {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("file.csv"))){
             String header = bufferedReader.readLine();
-            setHeader(header.split(";"));
+            setHeader(header.split("; "));
 
             String line;
             int rowCount = 0;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] values = line.split(";");
+                String[] values = line.split("; ");
                 int[] row = stringArrayToIntArray(values);
                 addDataRow(rowCount, row);
                 rowCount++;
