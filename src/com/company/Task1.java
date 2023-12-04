@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 
 public class Task1 {
     private int[] numbers;
+
     public Task1(int length) {
         this.numbers = new int[length];
         Random random = new Random();
@@ -13,8 +14,9 @@ public class Task1 {
         }
     }
 
+    //Для любого набора случайно-сгенерированных чисел нужно определить количество чётных чисел.
     public int findEvenNumbers() {
-        return (int)IntStream.of(this.numbers)
+        return (int) IntStream.of(this.numbers)
                 .filter(x -> x % 2 == 0).count();
     }
 

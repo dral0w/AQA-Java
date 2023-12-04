@@ -65,6 +65,7 @@ public class Task4 {
         }
     }
 
+    //Необходимо узнать средний возраст студентов мужского пола
     public double task4_1() {
         Student[] array = students.stream().filter(student -> student.gender == Gender.MAN)
                 .toArray(Student[]::new);
@@ -75,6 +76,8 @@ public class Task4 {
         return result / array.length;
     }
 
+    //Кому из студентов грозит получение повестки в этом году при условии,
+    //что призывной возраст установлен в диапазоне от 18 до 27 лет
     public String task4_2() {
         Student[] array = students.stream().filter(student -> student.gender == Gender.MAN)
                 .filter(student -> student.age >= 18 && student.age <= 27)

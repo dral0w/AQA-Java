@@ -1,7 +1,12 @@
 package com.company;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Scanner;
 
+//Нужно написать программу, которая будет принимать от пользователя ввод различных логинов.
+//Как только пользователь введет пустую строку - программа должна прекратить приём данных от пользователя
+//и вывести в консоль логины, начинающиеся на букву f (строчную).
 public class Task5 {
     Collection<String> collection = new ArrayList<>();
 
