@@ -1,25 +1,20 @@
 package com.company;
 
 public class Main {
-    public static class MyArraySizeException extends Exception {
-        public MyArraySizeException() {
-            super("Неверный размер массива");
-        }
-    }
-
-    public static class MyArrayDataException extends Exception {
-        public MyArrayDataException(String index) {
-            super("Неверные данные в ячейке" + index);
-        }
-    }
-
     /*
     Напишите метод, на вход которого подаётся двумерный строковый массив размером 4х4.
     При подаче массива другого размера необходимо бросить исключение MyArraySizeException.
      */
     public static int myArray(String[][] array) throws MyArrayDataException, MyArraySizeException {
-        if (array.length != 4 || array[0].length != 4) {
+        if (array.length != 4) {
             throw new MyArraySizeException();
+        }
+        for (String[] strings : array) {
+            for (int j = 0; j < strings.length; j++) {
+                if (strings.length != 4) {
+                    throw new MyArraySizeException();
+                }
+            }
         }
         /*
         Далее метод должен пройтись по всем элементам массива, преобразовать в int и просуммировать.
@@ -49,15 +44,13 @@ public class Main {
                 {"1", "2", "3", "4"},
                 {"5", "6", "7", "8"},
                 {"9", "10", "11", "12"},
-                {"13", "14", "15", "A"}
+                {"13", "14", "15", "16", "17"}
         };
 
         try {
             int sum = myArray(array);
             System.out.println("Сумма элементов массива: " + sum);
-        } catch (MyArraySizeException e) {
-            System.out.println(e.getMessage());
-        } catch (MyArrayDataException e) {
+        } catch (MyArraySizeException | MyArrayDataException e) {
             System.out.println(e.getMessage());
         }
     }
