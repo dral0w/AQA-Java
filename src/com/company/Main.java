@@ -39,12 +39,12 @@ public class Main {
 
         Directory directory = new Directory();
         directory.add("Иванов", "123456");
-        directory.add("Петров", "123456");
+        directory.add("Петров", "1234567");
         directory.add("Сидоров", "123456");
         directory.add("Иванов", "111111");
         directory.add("Иванов", "111111");
         directory.add("Иванов", "111111");
         directory.add("Сидоров", "123456");
-        System.out.println(directory.get("Петров"));
+        System.out.println(directory.get("Иванов"));
     }
 }

@@ -24,6 +24,6 @@ public class Directory {
     //Следует учесть, что под одной фамилией может быть несколько телефонов (в случае однофамильцев),
     //тогда при запросе такой фамилии должны выводиться все телефоны
     public String get(String name) {
-        return Arrays.toString(map.get(name).toArray(new String[0]));
+        return Arrays.toString(map.get(name).toArray(String[]::new));
     }
 }
