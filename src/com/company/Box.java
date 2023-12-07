@@ -30,7 +30,7 @@ public class Box<T> {
 //Внутри класса Box сделать метод compare(),
 //который позволяет сравнить текущую коробку с той, которую подадут в compare() в качестве параметра.
 //true – если их массы равны, false в противоположном случае. Можно сравнивать коробки с яблоками и апельсинами
-    public boolean compare(Box box) {
+    public boolean compare(Box<? extends Fruit> box) {
         return this.getWeight() == box.getWeight();
     }
 
