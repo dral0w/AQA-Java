@@ -67,13 +67,8 @@ public class Task4 {
 
     //Необходимо узнать средний возраст студентов мужского пола
     public double task4_1() {
-        Student[] array = students.stream().filter(student -> student.gender == Gender.MAN)
-                .toArray(Student[]::new);
-        double result = 0;
-        for (Student student : array) {
-            result += student.getAge();
-        }
-        return result / array.length;
+        return students.stream().filter(student -> student.getGender().equals(Gender.MAN))
+                .mapToInt(Student::getAge).average().getAsDouble();
     }
 
     //Кому из студентов грозит получение повестки в этом году при условии,

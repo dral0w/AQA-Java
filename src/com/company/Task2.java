@@ -19,11 +19,8 @@ public class Task2 {
 
     //Определить, какой элемент в коллекции находится на первом месте. Если мы получили пустую коллекцию, то пусть возвращается 0
     public String task2_2() {
-        if (collection.isEmpty()) {
-            return null;
-        }
         return collection.stream()
-                .findFirst().get();
+                .findFirst().orElse("0");
     }
 
     //Необходимо вернуть последний элемент, если получили пустую коллекцию, то пусть возвращается 0

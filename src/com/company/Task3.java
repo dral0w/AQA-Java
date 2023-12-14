@@ -1,6 +1,8 @@
 package com.company;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class Task3 {
     private Collection<String> collection;
@@ -11,14 +13,10 @@ public class Task3 {
 
     //Задана коллекция, содержащая элементы "f10", "f15", "f2", "f4", "f4".
     //Необходимо отсортировать строки по возрастанию и добавить их в массив
-    public String[] sort() {
-        Collection<String> result = collection.stream()
-                .sorted((s1, s2) -> {
-                    int num1 = Integer.parseInt(s1.substring(1));
-                    int num2 = Integer.parseInt(s2.substring(1));
-                    return Integer.compare(num1, num2);
-                }).toList();
-        return result.toArray(String[]::new);
+    public void sort() {
+        this.collection = collection.stream()
+                .sorted(Comparator.comparingInt(s -> Integer.parseInt(s.substring(1))))
+                .collect(Collectors.toList());
     }
 
     public Collection<String> getCollection() {
