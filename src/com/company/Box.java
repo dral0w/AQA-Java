@@ -5,7 +5,7 @@ import java.util.List;
 
 //Класс Box, в который можно складывать фрукты.
 //Коробки условно сортируются по типу фрукта, поэтому в одну коробку нельзя сложить и яблоки, и апельсины
-public class Box<T> {
+public class Box<T extends Fruit> {
     private List<T> list = new ArrayList<>();
 
 //Метод добавления фрукта в коробку
@@ -20,11 +20,12 @@ public class Box<T> {
             System.out.println("Коробка пустая");
             return 0;
         }
-        if (list.get(0) instanceof Apple) {
-            return list.size() * 1.0f;
-        } else {
-            return list.size() * 1.5f;
+
+        float weight = 0.0f;
+        for (T fruit : list) {
+            weight += fruit.getWeight();
         }
+        return weight;
     }
 
 //Внутри класса Box сделать метод compare(),
@@ -41,9 +42,9 @@ public class Box<T> {
         if (this.list.isEmpty()) {
             System.out.println("Коробка пустая");
         }
-        int count = list.size();
-        for (int i = 0; i < count; i++) {
-            box.addFruit(list.remove(list.size() - 1));
+        for (T fruit : list) {
+            box.addFruit(fruit);
         }
+        list.clear();
     }
 }

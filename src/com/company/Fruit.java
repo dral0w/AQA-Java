@@ -1,4 +1,5 @@
 package com.company;
 
-public class Fruit {
+public abstract class Fruit {
+    public abstract float getWeight();
 }
