@@ -27,6 +27,7 @@
       <scope>test</scope>
     </dependency>
 
+
     <!--Зависимость Selenium -->
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
