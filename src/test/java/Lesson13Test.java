@@ -5,19 +5,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Lesson13Test {
     private static WebDriver driver;
-
     @BeforeEach
     void setUp() {
-        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
         driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://mts.by");
         WebElement cookieAgree = driver.findElement(By.id("cookie-agree"));
         cookieAgree.click();
@@ -35,12 +35,15 @@ public class Lesson13Test {
     @Test
     public void testPaymentLogos() {
         WebElement logos = driver.findElement(By.className("pay__partners"));
-        assertTrue(logos.findElement(By.cssSelector("img[alt='Visa']")).isDisplayed());
-        assertTrue(logos.findElement(By.cssSelector("img[alt='Verified By Visa']")).isDisplayed());
-        assertTrue(logos.findElement(By.cssSelector("img[alt='MasterCard']")).isDisplayed());
-        assertTrue(logos.findElement(By.cssSelector("img[alt='MasterCard Secure Code']")).isDisplayed());
-        assertTrue(logos.findElement(By.cssSelector("img[alt='Белкарт']")).isDisplayed());
-        assertTrue(logos.findElement(By.cssSelector("img[alt='МИР']")).isDisplayed());
+
+        assertAll("Logo display check",
+                () -> assertTrue(logos.findElement(By.cssSelector("img[alt='Visa']")).isDisplayed()),
+                () -> assertTrue(logos.findElement(By.cssSelector("img[alt='Verified By Visa']")).isDisplayed()),
+                () -> assertTrue(logos.findElement(By.cssSelector("img[alt='MasterCard']")).isDisplayed()),
+                () -> assertTrue(logos.findElement(By.cssSelector("img[alt='MasterCard Secure Code']")).isDisplayed()),
+                () -> assertTrue(logos.findElement(By.cssSelector("img[alt='Белкарт']")).isDisplayed()),
+                () -> assertTrue(logos.findElement(By.cssSelector("img[alt='МИР']")).isDisplayed())
+        );
     }
 
     //Проверить работу ссылки «Подробнее о сервисе»
@@ -63,11 +66,11 @@ public class Lesson13Test {
         phoneNumberInput.sendKeys("297777777");
         moneyToPay.sendKeys("3");
         continueButton.click();
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        WebElement frame = driver.findElement(By.className("bepaid-iframe"));
-        driver.switchTo().frame(frame);
-
-        assertTrue(driver.findElement(By.tagName("app-payment-container")).isEnabled());
+        driver.switchTo().frame(driver.findElement(By.className("bepaid-iframe")));
+        Duration timeout = Duration.ofSeconds(10);
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.className("card-page__card"))));
+        assertTrue(driver.findElement(By.className("card-page__card")).isDisplayed());
     }
 
     @AfterEach
