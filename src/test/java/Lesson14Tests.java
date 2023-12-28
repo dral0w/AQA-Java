@@ -2,6 +2,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,12 +13,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Lesson14Tests {
-    private static WebDriver driver;
+class Lesson14Tests {
+    private WebDriver driver;
 
     @BeforeEach
     void setUp() {
@@ -26,84 +29,36 @@ public class Lesson14Tests {
         cookieAgree.click();
     }
 
-    //Проверка надписей в незаполненных полях "Услуги связи"
-    @Test
-    public void checkCommunicationServicesFields() {
-        WebElement phoneField = driver.findElement(By.id("connection-phone"));
-        WebElement sumField = driver.findElement(By.id("connection-sum"));
-        WebElement emailField = driver.findElement(By.id("connection-email"));
+    //Проверка надписей в незаполненных полях
+    @ParameterizedTest
+    @MethodSource("getServiceFields")
+    void checkServiceFields(ServiceType serviceType, String phonePlaceholder, String sumPlaceholder, String emailPlaceholder) {
+        selectServiceType(serviceType);
 
-        Assertions.assertAll("Communication services fields check",
-                () -> assertEquals("Номер телефона", phoneField.getAttribute("placeholder")),
-                () -> assertEquals("Сумма", sumField.getAttribute("placeholder")),
-                () -> assertEquals("E-mail для отправки чека", emailField.getAttribute("placeholder"))
-        );
-    }
+        WebElement phoneField = driver.findElement(By.id(serviceType.getPhoneFieldId()));
+        WebElement sumField = driver.findElement(By.id(serviceType.getSumFieldId()));
+        WebElement emailField = driver.findElement(By.id(serviceType.getEmailFieldId()));
 
-    //Проверка надписей в незаполненных полях "Домашний интернет"
-    @Test
-    public void checkHomeInternetFields() {
-        driver.findElement(By.className("select__header")).click();
-        driver.findElement(By.xpath("//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[1]/div[1]/div[2]/ul/li[2]/p")).click();
-
-        WebElement phoneField = driver.findElement(By.id("internet-phone"));
-        WebElement sumField = driver.findElement(By.id("internet-sum"));
-        WebElement emailField = driver.findElement(By.id("internet-email"));
-        Assertions.assertAll("Home internet fields check",
-                () -> assertEquals("Номер абонента", phoneField.getAttribute("placeholder")),
-                () -> assertEquals("Сумма", sumField.getAttribute("placeholder")),
-                () -> assertEquals("E-mail для отправки чека", emailField.getAttribute("placeholder"))
-        );
-    }
-
-    //Проверка надписей в незаполненных полях "Рассрочка"
-    @Test
-    public void checkInstallmentPlanFields() {
-        driver.findElement(By.className("select__header")).click();
-        driver.findElement(By.xpath("//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[1]/div[1]/div[2]/ul/li[3]/p")).click();
-
-        WebElement phoneField = driver.findElement(By.id("score-instalment"));
-        WebElement sumField = driver.findElement(By.id("instalment-sum"));
-        WebElement emailField = driver.findElement(By.id("instalment-email"));
-
-        Assertions.assertAll("Installment plan fields check",
-                () -> assertEquals("Номер счета на 44", phoneField.getAttribute("placeholder")),
-                () -> assertEquals("Сумма", sumField.getAttribute("placeholder")),
-                () -> assertEquals("E-mail для отправки чека", emailField.getAttribute("placeholder"))
-        );
-    }
-
-    //Проверка надписей в незаполненных полях "Задолженность"
-    @Test
-    public void checkDebtFields() {
-        driver.findElement(By.className("select__header")).click();
-        driver.findElement(By.xpath("//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[1]/div[1]/div[2]/ul/li[4]/p")).click();
-
-        WebElement phoneField = driver.findElement(By.id("score-arrears"));
-        WebElement sumField = driver.findElement(By.id("arrears-sum"));
-        WebElement emailField = driver.findElement(By.id("arrears-email"));
-
-        Assertions.assertAll("Debt fields check",
-                () -> assertEquals("Номер счета на 2073", phoneField.getAttribute("placeholder")),
-                () -> assertEquals("Сумма", sumField.getAttribute("placeholder")),
-                () -> assertEquals("E-mail для отправки чека", emailField.getAttribute("placeholder"))
+        assertAll("Service fields check",
+                () -> assertEquals(phonePlaceholder, phoneField.getAttribute("placeholder")),
+                () -> assertEquals(sumPlaceholder, sumField.getAttribute("placeholder")),
+                () -> assertEquals(emailPlaceholder, emailField.getAttribute("placeholder"))
         );
     }
 
     //Заполнение полей в услугах связи и проверка различных полей и логотипов платежных систем
     @Test
-    public void refillCommunicationServicesFields() {
-        WebElement phoneNumberInput = driver.findElement(By.id("connection-phone"));
-        WebElement moneyToPay = driver.findElement(By.id("connection-sum"));
+    void refillServiceFields() {
+        WebElement phoneNumberInput =  driver.findElement(By.id("connection-phone"));
+        WebElement moneyToPay =  driver.findElement(By.id("connection-sum"));
         WebElement continueButton = driver.findElement(By.xpath("//*[@id=\"pay-connection\"]/button"));
 
         phoneNumberInput.sendKeys("297777777");
         moneyToPay.sendKeys("3");
         continueButton.click();
         driver.switchTo().frame(driver.findElement(By.className("bepaid-iframe")));
-        Duration timeout = Duration.ofSeconds(10);
-        WebDriverWait wait = new WebDriverWait(driver, timeout);
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.className("card-page__card"))));
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOf(driver.findElement(By.className("card-page__card"))));
 
         WebElement headerPaymentAmount = driver.findElement(By.className("header__payment-amount"));
         WebElement headerPaymentInfo = driver.findElement(By.className("header__payment-info"));
@@ -112,9 +67,9 @@ public class Lesson14Tests {
         WebElement cvc = driver.findElement(By.className("ng-tns-c47-5"));
         WebElement holderName = driver.findElement(By.className("ng-tns-c47-3"));
         WebElement submitButton = driver.findElement(By.className("colored"));
-        WebElement masterCardLogo = driver.findElement(By.cssSelector("img[src*='assets/images/payment-icons/card-types/mastercard-system.svg']"));
-        WebElement visaLogo = driver.findElement(By.cssSelector("img[src*='assets/images/payment-icons/card-types/visa-system.svg']"));
-        WebElement belKartLogo = driver.findElement(By.cssSelector("img[src*='assets/images/payment-icons/card-types/belkart-system.svg"));
+        WebElement masterCardLogo = driver.findElement(By.cssSelector("[class*='cards-brands'] img[src*='mastercard']"));
+        WebElement visaLogo = driver.findElement(By.cssSelector("[class*='cards-brands'] img[src*='visa-system']"));
+        WebElement belKartLogo = driver.findElement(By.cssSelector("[class*='cards-brands'] img[src*='belkart-system"));
 
         Assertions.assertAll(() -> assertEquals("3.00 BYN", headerPaymentAmount.getText()),
                 () -> assertEquals("Оплата: Услуги связи Номер:375297777777", headerPaymentInfo.getText()),
@@ -134,6 +89,55 @@ public class Lesson14Tests {
     void tearDown() {
         if (driver != null) {
             driver.quit();
+        }
+    }
+
+    private static Stream<Arguments> getServiceFields() {
+        return Stream.of(
+                Arguments.of(ServiceType.COMMUNICATION, "Номер телефона", "Сумма", "E-mail для отправки чека"),
+                Arguments.of(ServiceType.INTERNET_HOME, "Номер абонента", "Сумма", "E-mail для отправки чека"),
+                Arguments.of(ServiceType.INSTALLMENT_PLAN, "Номер счета на 44", "Сумма", "E-mail для отправки чека"),
+                Arguments.of(ServiceType.DEBT, "Номер счета на 2073", "Сумма", "E-mail для отправки чека")
+        );
+    }
+
+    private void selectServiceType(ServiceType serviceType) {
+        driver.findElement(By.className("select__header")).click();
+        driver.findElement(By.xpath("//p[contains(@class,'select__option') and contains(text(),'" + serviceType.getName() + "')]")).click();
+    }
+
+    private enum ServiceType {
+        COMMUNICATION("Услуги связи", "connection-phone", "connection-sum", "connection-email"),
+        INTERNET_HOME("Домашний интернет", "internet-phone", "internet-sum", "internet-email"),
+        INSTALLMENT_PLAN("Рассрочка", "score-instalment", "instalment-sum", "instalment-email"),
+        DEBT("Задолженность", "score-arrears", "arrears-sum", "arrears-email");
+
+        private final String name;
+        private final String phoneFieldId;
+        private final String sumFieldId;
+        private final String emailFieldId;
+
+        ServiceType(String name, String phoneFieldId, String sumFieldId, String emailFieldId) {
+            this.name = name;
+            this.phoneFieldId = phoneFieldId;
+            this.sumFieldId = sumFieldId;
+            this.emailFieldId = emailFieldId;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getPhoneFieldId() {
+            return phoneFieldId;
+        }
+
+        public String getSumFieldId() {
+            return sumFieldId;
+        }
+
+        public String getEmailFieldId() {
+            return emailFieldId;
         }
     }
 }
