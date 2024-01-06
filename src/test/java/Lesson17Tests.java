@@ -23,8 +23,8 @@ public class Lesson17Tests {
     public void setUp() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel_3a:5554");
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel 3a");
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 
         try {
@@ -76,7 +76,7 @@ public class Lesson17Tests {
 
         assertEquals("2", driver.findElement(By.id("com.google.android.calculator:id/result_final")).getText());
     }
-
+    
     @AfterEach
     public void tearDown() {
         driver.pressKey(new KeyEvent(AndroidKey.HOME));
